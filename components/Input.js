@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, Text, TextInput, View, Animated } from "react-native";
 
 import { theme } from '../constants';
 
@@ -7,12 +7,27 @@ const Input = (props) => {
   const { label } = props;
   const [placeholder, setPlaceholder] = useState(props.placeholder);
   const [onFocus, setOnFocus] = useState(false);
+  const labelOpacity = useState(new Animated.Value(0))[0];
+
+  const onFocuslabelAnimation = Animated.timing(labelOpacity, {
+    toValue: 1,
+    duration: 100,
+    useNativeDriver: true
+  });
+
+  const onBlurlabelTextAnimation = Animated.timing(labelOpacity, {
+    toValue: 0,
+    duration: 100,
+    useNativeDriver: true
+  });
 
   const onFocusHandler = () => {
+    onFocuslabelAnimation.start();
     setOnFocus(true);
   }
   
   const onBlurHandler = () => {
+    onBlurlabelTextAnimation.start();
     setOnFocus(false);
   }
 
@@ -39,9 +54,9 @@ const Input = (props) => {
           onFocus={onFocusHandler}
           onBlur={onBlurHandler}
         />
-        <View style={styles.label}>
+        <Animated.View style={{ ...styles.label, opacity: labelOpacity }}>
           <Text style={styles.textLabel}>{label}</Text>
-        </View>
+        </Animated.View>
       </View>
     </View>
   );
