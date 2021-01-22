@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, Dimensions } from 'react-native';
-import BottomSheet from 'reanimated-bottom-sheet';
-import { AntDesign } from '@expo/vector-icons'; 
+import { StyleSheet, Text, View, Button } from 'react-native';
 
-const sheetHeight = Dimensions.get('window').height - 20;
+
+import BottomSheet from './BottomSheet/BottomSheet';
+
 
 export default class App extends Component {
   constructor() {
@@ -22,26 +22,23 @@ export default class App extends Component {
     console.log('changed boolean handler');
   }
 
-  renderContent = () => (
-    <View
-      style={{
-        backgroundColor: 'white',
-        padding: 16,
-        height: sheetHeight,
-      }}
-    >
-      <Text>Swipe down to close</Text>
-      <Text>Number: {this.state.number}</Text>
-    </View>
-  );
+  bottomSheetOpenHandler = () => {
+    this.sheetRef.current.snapTo(1);
+  }
 
-  renderHeader = () => (
-    <View style={styles.sheetHeaderContainer}>
-      <AntDesign name="left" size={24} color="black" style={{ marginRight: 20 }} />
-      <Text style={styles.sheetHeaderTitle}>Filters</Text>
-      <Text style={{ marginLeft: 'auto', lineHeight: 25, }}>Reset</Text>
-    </View>
-  )
+  backButtonPressHandler = () => {
+    console.log('[parent]: BACK button pressed on bottom sheet.');
+    this.sheetRef.current.snapTo(2);
+  }
+
+  resetButtonPressHandler = () => {
+    console.log('[parent]: RESET button pressed on bottom sheet.');
+    this.sheetRef.current.snapTo(2);
+  }
+
+  applyFilterButtonHandler = () => {
+    console.log('[parent]: APPLY FILTER button pressed on bottom sheet');
+  }
 
   render() {
     return (
@@ -57,7 +54,7 @@ export default class App extends Component {
           <View style={{ marginTop: 30 }}>
             <Button
               title="Open Bottom Sheet"
-              onPress={() => this.sheetRef.current.snapTo(1)}
+              onPress={this.bottomSheetOpenHandler}
             />
             <Text>This text is under bootom sheet</Text>
             <Button
@@ -67,13 +64,11 @@ export default class App extends Component {
           </View>
         </View>
 
-        <BottomSheet
-          ref={this.sheetRef}
-          snapPoints={[sheetHeight, sheetHeight - 180, 0]}
-          borderRadius={0}
-          initialSnap={1}
-          renderContent={this.renderContent}
-          renderHeader={this.renderHeader}
+        <BottomSheet 
+          sheetRef={this.sheetRef} 
+          onBackButtonPress={this.backButtonPressHandler} 
+          onResetButtonPress={this.resetButtonPressHandler}
+          applyFilterButtonHandler={this.applyFilterButtonHandler}
         />
       </>
     );
@@ -81,21 +76,5 @@ export default class App extends Component {
 }
 
 const styles = StyleSheet.create({
-  sheetHeaderContainer: {
-    backgroundColor: 'white',
-    // paddingVertical: 18,
-    height: 68,
-    paddingHorizontal: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    flexDirection: 'row',
-    alignItems: 'center',
-    top: 4,
-  },
-  sheetHeaderTitle: {
-    fontSize: 19,
-    lineHeight: 25,
-  }
+  
 });
