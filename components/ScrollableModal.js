@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Button, StyleSheet, Animated } from 'react-native';
+import { View, Text, TouchableOpacity, Button, StyleSheet, Animated, Dimensions } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 
 
@@ -39,6 +39,8 @@ export class ScrollableModal extends React.Component  {
   };
 
   render() {
+    const height = Dimensions.get("window").height - 60;
+
     return (
       <>
         <TouchableOpacity onPress={this.onOpen}>
@@ -49,18 +51,21 @@ export class ScrollableModal extends React.Component  {
           ref={this.modalizeRef}
           HeaderComponent={<Header onClose={this.onClose} />}
           FooterComponent={<Button title="Apply Filter" />}
-          modalHeight={400}
-          flatListProps={{
-            data: filterOptions,
-            renderItem: renderItem,
-            keyExtractor: (item, index) => index.toString(),
-            showsVerticalScrollIndicator: false,
-            scrollEventThrottle: 16,
-            removeClippedSubviews: true,
-            maxToRenderPerBatch: 20
-          }}
-          withHandle={false}
+          modalHeight={height}
+          // flatListProps={{
+          //   data: filterOptions,
+          //   renderItem: renderItem,
+          //   keyExtractor: (item, index) => index.toString(),
+          //   showsVerticalScrollIndicator: false,
+          //   scrollEventThrottle: 16,
+          //   removeClippedSubviews: true,
+          //   maxToRenderPerBatch: 20
+          // }}
+          withHandle={true}
           useNativeDriver={true}
+          snapPoint={height / 2 }
+          handlePosition="outside"
+          disableScrollIfPossible={false}
         />
       </>
     );

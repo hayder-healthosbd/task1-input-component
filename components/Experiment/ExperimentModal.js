@@ -1,5 +1,6 @@
-import React, { Component, createRef } from 'react'
-import { Text, StyleSheet, View, Button, Animated, Dimensions } from 'react-native'
+import React, { Component, createRef } from 'react';
+import Animated, { Easing } from 'react-native-reanimated'
+import { Text, StyleSheet, View, Button, Dimensions } from 'react-native';
 
 export default class experimentModal extends Component {
   state = {
@@ -10,8 +11,8 @@ export default class experimentModal extends Component {
   fadeInModal = () => {
     Animated.timing(this.state.opacity, {
       toValue: 1,
-      duration: 300,
-      useNativeDriver: true
+      duration: 200,
+      easing: Easing.in(Easing.ease),
     }).start();
   }
 
@@ -19,8 +20,8 @@ export default class experimentModal extends Component {
   fadeOutModal = () => {
     Animated.timing(this.state.opacity, {
       toValue: 0,
-      duration: 300,
-      useNativeDriver: true
+      duration: 200,
+      easing: Easing.in(Easing.ease),
     }).start();
   }
 
@@ -28,20 +29,33 @@ export default class experimentModal extends Component {
     this.fadeInModal();
   }
 
+  // componentDidUpdate(prevState, prevProps) {
+  //   console.log('in cmp update');
+  //   if ((prevProps.isVisible !== this.props.isVisible) && this.props.isVisible === true) {
+  //     this.fadeOutModal();
+  //   }
+  // }
+
   componentWillUnmount() {
+    console.log('modal unmounted!');
     this.fadeOutModal();
   }
 
   render() {
-    return (
-      <Animated.View style={{...styles.container, opacity: this.state.opacity}}>
+    console.log('[ExperimentModal]: ', this.props.isVisible);
+
+    const modalContainer = (
+      <Animated.View style={{ ...styles.container, opacity: this.state.opacity} }>
         <Animated.View style={styles.modalOverlay}>
         </Animated.View>
         <Animated.View style={styles.modal}>
           {this.props.children}
         </Animated.View>
       </Animated.View>
-    )
+    );
+
+    return modalContainer;
+
   }
 }
 
@@ -50,6 +64,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     justifyContent: 'flex-end',
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
   },
   modalOverlay: {
     width: '100%',
@@ -65,4 +84,4 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     position: 'absolute',
   }
-})
+});
