@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, View, Dimensions, ScrollView, FlatList } from 'react-native';
+import { Text, StyleSheet, View, Dimensions, ScrollView } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 
 import FooterContent from './FooterContent';
 import { filterOptions } from '../../../constants';
@@ -15,20 +16,21 @@ const renderItem = ({ item }) => {
 }
 
 export default class RenderContent extends Component {
+
   render() {
     const { applyFilterButtonHandler } = this.props;
 
     return (
-      <View style={styles.container} >
+      <View style={styles.container}>
         <View style={styles.body}>
-          <FlatList 
-            data={filterOptions.slice(0, 20)}
+          <FlatList
+            data={filterOptions}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
-            onScrollBeginDrag={() => console.log('begin drag')}
-            onScroll={() => console.log('on scroll scrolling')}
+            style={{ flex: 1 }}
           />
         </View>
+
         <FooterContent
           onPress={applyFilterButtonHandler}
         />
